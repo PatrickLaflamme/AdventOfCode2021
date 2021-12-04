@@ -23,9 +23,15 @@ pub fn solve_part1(readings: &[u32]) -> u32 {
   return sum;
 }
 
-//#[aoc(day1, part2)]
-pub fn solve_part2(readings: &str) -> u32 {
-  0
+#[aoc(day1, part2)]
+pub fn solve_part2(readings: &[u32]) -> u32 {
+  let mut sum: u32 = 0;
+  for n in 3..readings.len() {
+    if readings[n] > readings[n-3] {
+      sum += 1
+    }
+  }
+  return sum;
 }
 
 
