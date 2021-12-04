@@ -1,5 +1,4 @@
 use aoc_runner_derive::{aoc, aoc_generator};
-use std::println;
 
 #[aoc_generator(day1)]
 pub fn str_to_u32(raw_input: &str) -> Vec<u32> {
