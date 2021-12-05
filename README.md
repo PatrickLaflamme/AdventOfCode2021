@@ -1,7 +1,7 @@
 # 🎄 AdventOfCode2021 [![CI](https://github.com/PatrickLaflamme/AdventOfCode2021/actions/workflows/rust.yml/badge.svg)](https://github.com/PatrickLaflamme/AdventOfCode2021/actions/workflows/rust.yml) ![GitHub last commit](https://img.shields.io/github/last-commit/PatrickLaflamme/AdventOfCode2021)
 My Rusty [Solutions](https://github.com/PatrickLaflamme/AdventOfCode2021/tree/master/src) to [Advent Of Code 2021](https://adventofcode.com/2021)
 
-- Day 1: Sonar Sweep [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day1.rs#L13), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day1.rs#L26)]
-- Day 2: Dive! [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day2.rs#L21), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day2.rs#L31)]
-- Day 3: Binary Diagnostic [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day3.rs#L22), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day3.rs#L76)]
-- Day 4: Giant Squid [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day4.rs#L95), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day4.rs#L101)]
+- Day 1: Sonar Sweep [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day1.rs#L13), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day1.rs#L26)]
+- Day 2: Dive! [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day2.rs#L21), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day2.rs#L31)]
+- Day 3: Binary Diagnostic [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day3.rs#L22), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day3.rs#L76)]
+- Day 4: Giant Squid [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day4.rs#L95), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day4.rs#L101)]
