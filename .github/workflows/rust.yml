@@ -30,4 +30,4 @@ jobs:
           target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Run Latest AOC challenge
-      run: cargo install cargo-aoc && cargo aoc
+      run: cargo install cargo-aoc || true && cargo aoc
