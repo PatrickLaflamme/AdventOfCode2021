@@ -5,7 +5,6 @@ use std::convert::TryInto;
 const ONE: char = '1';
 const ZERO: char = '0';
 
-//#[aoc_generator(day3)]
 pub fn split(raw_input: &str) -> Vec<String> {
     raw_input
         .lines()
