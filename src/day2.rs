@@ -41,7 +41,7 @@ pub fn part2(commands: &[(i32, i32, i32)]) -> i32 {
 mod tests {
     use super::*;
 
-    const example: &str = "forward 5
+    const EXAMPLE: &str = "forward 5
     down 5
     forward 8
     up 3
@@ -50,7 +50,7 @@ mod tests {
 
     #[test]
     fn test_generator() {
-        assert_eq!(str_to_input(&example), [
+        assert_eq!(str_to_input(&EXAMPLE), [
             (5, 0, 0),
             (0, 5, 5),
             (8, 0, 0),
@@ -62,13 +62,13 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let example_input: Vec<(i32, i32, i32)> = str_to_input(&example);
+        let example_input: Vec<(i32, i32, i32)> = str_to_input(&EXAMPLE);
         assert_eq!(part1(&example_input), 150);
     }
 
     #[test]
     fn test_part2() {
-        let example_input: Vec<(i32, i32, i32)> = str_to_input(&example);
+        let example_input: Vec<(i32, i32, i32)> = str_to_input(&EXAMPLE);
         assert_eq!(part2(&example_input), 900);
     }
 }
