@@ -1,5 +1,5 @@
 # 🎄 AdventOfCode2021 [![CI](https://github.com/PatrickLaflamme/AdventOfCode2021/actions/workflows/rust.yml/badge.svg)](https://github.com/PatrickLaflamme/AdventOfCode2021/actions/workflows/rust.yml) ![GitHub last commit](https://img.shields.io/github/last-commit/PatrickLaflamme/AdventOfCode2021)
-My Rusty [Solutions](https://github.com/PatrickLaflamme/AdventOfCode2021/tree/master/src/solutions) to [Advent Of Code 2021](https://adventofcode.com/2021)
+My Rusty [Solutions](https://github.com/PatrickLaflamme/AdventOfCode2021/tree/master/src) to [Advent Of Code 2021](https://adventofcode.com/2021)
 
 - Day 1: Sonar Sweep [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day1.rs#L13), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day1.rs#L26)]
 - Day 2: Dive! [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day2.rs#L21), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/day2.rs#L31)]
