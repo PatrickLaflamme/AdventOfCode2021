@@ -7,3 +7,4 @@ My Rusty [Solutions](https://github.com/PatrickLaflamme/AdventOfCode2021/tree/ma
 - Day 4: Giant Squid [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day4.rs#L95), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day4.rs#L101)]
 - Day 5: Hydrothermal Venture [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day5.rs#L74), [B](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day5.rs#L87)]
 - Day 6: Lanternfish [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day6.rs#L33)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day6.rs#L38)]
+- Day 7: The Treachery of Whales [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day6.rs#L33)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day6.rs#L38)]

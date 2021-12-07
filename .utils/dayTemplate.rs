@@ -1,17 +1,17 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 
 #[aoc_generator(dayx)]
-pub fn generator(raw_input: &str) -> Vec<u32> {
+pub fn generator(raw_input: &str) -> Vec<usize> {
     vec![0; 0]
 }
 
 #[aoc(dayx, part1)]
-pub fn solve_part1(readings: &[u32]) -> u32 {
+pub fn solve_part1(readings: &[usize]) -> usize {
     0
 }
 
 #[aoc(dayx, part2)]
-pub fn solve_part2(readings: &[u32]) -> u32 {
+pub fn solve_part2(readings: &[usize]) -> usize {
     0
 }
 
@@ -29,13 +29,13 @@ mod tests {
 
     #[test]
     fn test_solve_part1() {
-        let example: u32 = generator(&EXAMPLE);
+        let example: Vec<usize> = generator(&EXAMPLE);
         assert_eq!(solve_part1(&example), 0);
     }
 
     #[test]
     fn test_solve_part2() {
-        let example: u32 = generator(&EXAMPLE);
+        let example: Vec<usize> = generator(&EXAMPLE);
         assert_eq!(solve_part2(&example), 0);
     }
 }
