@@ -43,7 +43,7 @@ fn map_to_lower_points(heights: &[Vec<isize>], y: isize, row: &[isize]) -> IntoI
         .into_iter()
 }
 
-fn get_basin_size(heights: &[Vec<isize>], low_point: &(isize, isize, isize)) -> HashSet<(usize, usize)> {
+fn get_basin_size(heights: &[Vec<isize>], low_point: &(isize, isize, isize), crest_height: &isize) -> HashSet<(usize, usize)> {
     let mut to_visit = VecDeque::from([*low_point]);
     let mut seen = HashSet::<(usize, usize)>::new();
     let width_range = 0..heights[0].len();
@@ -53,22 +53,17 @@ fn get_basin_size(heights: &[Vec<isize>], low_point: &(isize, isize, isize)) -> 
             break;
         }
         let (x, y, point) = to_visit.pop_front().unwrap();
-        let new_neighbors: Vec<(usize, usize)> = DIRECTIONS.iter()
-            .map(|(dx, dy)| ((x + dx) as usize, (y + dy) as usize))
-            .filter(|(neighbor_x, neighbor_y)| {
-                width_range.contains(&neighbor_x) && height_range.contains(&neighbor_y)
-            })
-            .filter(|neighbor| {
-                !seen.contains(&neighbor)
-            })
-            .collect();
-        let is_part_of_basin = new_neighbors.iter()
-            .any(|(neighbor_x, neighbor_y)| point < heights[*neighbor_y][*neighbor_x]);
-        
-        if is_part_of_basin {
+        if point < *crest_height {
             seen.insert((x as usize, y as usize));
-            new_neighbors.iter()
-                .for_each(|(nx, ny)| to_visit.push_back((*nx as isize, *ny as isize, heights[*ny][*nx])));
+            DIRECTIONS.iter()
+                .map(|(dx, dy)| ((x + dx) as usize, (y + dy) as usize))
+                .filter(|(neighbor_x, neighbor_y)| {
+                    width_range.contains(&neighbor_x) && height_range.contains(&neighbor_y)
+                })
+                .filter(|neighbor| {
+                    !seen.contains(&neighbor)
+                })
+                .for_each(|(nx, ny)| to_visit.push_back((nx as isize, ny as isize, heights[ny][nx])));
         }
     }
     return seen;
@@ -87,10 +82,23 @@ pub fn solve_part2(heights: &[Vec<isize>]) -> usize {
     let mut first = 0;
     let mut second = 0;
     let mut third = 0;
+    let crest_height = heights.iter()
+        .flat_map(|row| row)
+        .max()
+        .unwrap();
     heights.iter()
         .enumerate()
         .flat_map(|(y, row)| map_to_lower_points(heights, y.try_into().unwrap(), row))
-        .map(|low_point| get_basin_size(heights, &low_point))
+        .map(|low_point| get_basin_size(heights, &low_point, crest_height))
+        .fold(Vec::<HashSet<(usize, usize)>>::new(), |mut sets, set| {
+            let seen = sets.iter()
+                .any(|seen_set| seen_set.intersection(&set).count() > 0);
+            if !seen {
+                sets.push(set);
+            }
+            sets
+        })
+        .iter()
         .map(|set| set.len())
         .for_each(|size| {
             if size >= first {
@@ -119,6 +127,14 @@ mod tests {
         9899965678
     ";
 
+    const EXAMPLE2: &str = "
+        2199943210
+        3987894921
+        8856789892
+        8767896789
+        9899965678
+    ";
+
     #[test]
     fn test_generator() {
         let expected = vec![
@@ -138,8 +154,14 @@ mod tests {
     }
 
     #[test]
-    fn test_solve_part2() {
+    fn test_solve_part2a() {
         let example: Vec<Vec<isize>> = generator(&EXAMPLE);
         assert_eq!(solve_part2(&example), 1134);
+    }
+
+    #[test]
+    fn test_solve_part2b() {
+        let example: Vec<Vec<isize>> = generator(&EXAMPLE2);
+        assert_eq!(solve_part2(&example), 1458);
     }
 }
