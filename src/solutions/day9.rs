@@ -1,6 +1,15 @@
 use aoc_runner_derive::{aoc, aoc_generator};
+use std::collections::HashSet;
+use std::collections::VecDeque;
 use std::convert::TryInto;
 use std::vec::IntoIter;
+
+const DIRECTIONS: [(isize, isize); 4] = [
+    (1,0),
+    (0,1),
+    (-1,0),
+    (0,-1)
+];
 
 #[aoc_generator(day9)]
 pub fn generator(raw_input: &str) -> Vec<Vec<isize>> {
@@ -15,16 +24,12 @@ pub fn generator(raw_input: &str) -> Vec<Vec<isize>> {
         .collect()
 }
 
-fn find_lower_points(heights: &[Vec<isize>], x: &isize, point: &isize, y: &isize, width: usize, height: usize) ->  bool {
-    let directions: Vec<(isize, isize)> = vec![
-        (1,0),
-        (0,1),
-        (-1,0),
-        (0,-1)
-    ];
-    directions.iter()
+fn find_lower_points(heights: &[Vec<isize>], x: &isize, point: &isize, y: &isize) ->  bool {
+    let width_range = 0..heights[0].len();
+    let height_range = 0..heights.len();
+    DIRECTIONS.iter()
         .filter(|(dx, dy)| {
-            (0..width).contains(&((x + dx) as usize)) && (0..height).contains(&((y + dy) as usize))
+            width_range.contains(&((x + dx) as usize)) && height_range.contains(&((y + dy) as usize))
         })
         .all(|(dx, dy)| *point < heights[(y + dy) as usize][(x + dx) as usize])
 }
@@ -32,10 +37,41 @@ fn find_lower_points(heights: &[Vec<isize>], x: &isize, point: &isize, y: &isize
 fn map_to_lower_points(heights: &[Vec<isize>], y: isize, row: &[isize]) -> IntoIter<(isize, isize, isize)> {
     row.iter()
         .enumerate()
-        .filter(|(x, &point)| find_lower_points(heights, &(*x as isize), &point, &(y as isize), row.len(), heights.len()))
-        .map(|(x, &point)| (x as isize, y, point + &1))
+        .filter(|(x, &point)| find_lower_points(heights, &(*x as isize), &point, &(y as isize)))
+        .map(|(x, &point)| (x as isize, y, point))
         .collect::<Vec<_>>()
         .into_iter()
+}
+
+fn get_basin_size(heights: &[Vec<isize>], low_point: &(isize, isize, isize)) -> HashSet<(usize, usize)> {
+    let mut to_visit = VecDeque::from([*low_point]);
+    let mut seen = HashSet::<(usize, usize)>::new();
+    let width_range = 0..heights[0].len();
+    let height_range = 0..heights.len();
+    loop {
+        if to_visit.len() < 1 {
+            break;
+        }
+        let (x, y, point) = to_visit.pop_front().unwrap();
+        let new_neighbors: Vec<(usize, usize)> = DIRECTIONS.iter()
+            .map(|(dx, dy)| ((x + dx) as usize, (y + dy) as usize))
+            .filter(|(neighbor_x, neighbor_y)| {
+                width_range.contains(&neighbor_x) && height_range.contains(&neighbor_y)
+            })
+            .filter(|neighbor| {
+                !seen.contains(&neighbor)
+            })
+            .collect();
+        let is_part_of_basin = new_neighbors.iter()
+            .any(|(neighbor_x, neighbor_y)| point < heights[*neighbor_y][*neighbor_x]);
+        
+        if is_part_of_basin {
+            seen.insert((x as usize, y as usize));
+            new_neighbors.iter()
+                .for_each(|(nx, ny)| to_visit.push_back((*nx as isize, *ny as isize, heights[*ny][*nx])));
+        }
+    }
+    return seen;
 }
 
 #[aoc(day9, part1)]
@@ -43,12 +79,32 @@ pub fn solve_part1(heights: &[Vec<isize>]) -> isize {
     heights.iter()
         .enumerate()
         .flat_map(|(y, row)| map_to_lower_points(heights, y.try_into().unwrap(), row))
-        .fold(0, |sum, (_x, _y, point)| sum + point)
+        .fold(0, |sum, (_x, _y, point)| sum + point + 1)
 }
 
 #[aoc(day9, part2)]
-pub fn solve_part2(readings: &[Vec<isize>]) -> isize {
-    0
+pub fn solve_part2(heights: &[Vec<isize>]) -> usize {
+    let mut first = 0;
+    let mut second = 0;
+    let mut third = 0;
+    heights.iter()
+        .enumerate()
+        .flat_map(|(y, row)| map_to_lower_points(heights, y.try_into().unwrap(), row))
+        .map(|low_point| get_basin_size(heights, &low_point))
+        .map(|set| set.len())
+        .for_each(|size| {
+            if size >= first {
+                third = second;
+                second = first;
+                first = size;
+            } else if size >= second {
+                third = second;
+                second = size;
+            } else if size >= third {
+                third = size;
+            }
+        });
+    return first * second * third;
 }
 
 #[cfg(test)]
@@ -84,6 +140,6 @@ mod tests {
     #[test]
     fn test_solve_part2() {
         let example: Vec<Vec<isize>> = generator(&EXAMPLE);
-        assert_eq!(solve_part2(&example), 0);
+        assert_eq!(solve_part2(&example), 1134);
     }
 }
