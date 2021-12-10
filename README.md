@@ -10,3 +10,4 @@ My Rusty [Solutions](https://github.com/PatrickLaflamme/AdventOfCode2021/tree/ma
 - Day 7: The Treachery of Whales [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day7.rs#L14)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day7.rs#L24)]
 - Day 8: Seven Segment Search [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day8.rs#L22)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day8.rs#L99)]
 - Day 9: Smoke Basin [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day9.rs#L73)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day9.rs#L81)]
+- Day 10: Syntax Scoring [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day10.rs#L74)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day10.rs#L81)]
