@@ -12,3 +12,4 @@ My Rusty [Solutions](https://github.com/PatrickLaflamme/AdventOfCode2021/tree/ma
 - Day 9: Smoke Basin [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day9.rs#L73)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day9.rs#L81)]
 - Day 10: Syntax Scoring [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day10.rs#L74)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day10.rs#L81)]
 - Day 11: Dumbo Octopus [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day11.rs#L75)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day11.rs#L89)]
+- Day 12: Passage Pathing [[A](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day12.rs#L29)|[B}](https://github.com/PatrickLaflamme/AdventOfCode2021/blob/master/src/solutions/day12.rs#L49)]
