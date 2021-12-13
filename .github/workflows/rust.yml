@@ -42,14 +42,14 @@ jobs:
     needs: pre-benchmark
     runs-on: ubuntu-latest
     steps:
-    - run: ${{ needs.pre-benchmarks.outputs.matrix }}
+    - run: echo "${{ needs.pre-benchmark.outputs.matrix }}""
   benchmark:
     needs: pre-benchmark
     runs-on: ubuntu-latest
     strategy:
       matrix:
         part: [1, 2]
-        day: ${{ fromJSON(needs.pre-benchmarks.outputs.matrix) }}
+        day: ${{ fromJSON(needs.pre-benchmark.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
