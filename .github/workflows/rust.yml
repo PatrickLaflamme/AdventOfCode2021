@@ -38,6 +38,11 @@ jobs:
           matrix=`ls input/2021/ | sed -r 's/.*([0-9]+).*/\1/g' | jq -sc '.'`
           echo "${matrix}"
           echo "::set-output name=matrix::${matrix}"
+  debug:
+    needs: pre-benchmark
+    runs-on: ubuntu-latest
+    steps:
+    - run: ${{ fromJSON(needs.pre-benchmarks.outputs.matrix) }}
   benchmark:
     needs: pre-benchmark
     runs-on: ubuntu-latest
