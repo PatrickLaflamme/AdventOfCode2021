@@ -11,10 +11,7 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    outputs: 
-      matrix: ${{ steps.set-days-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
@@ -38,9 +35,14 @@ jobs:
         name: advent-of-code-2021
         path: |
           target/
+  pre-benchmark:
+    runs-on: ubuntu-latest
+    outputs: 
+      matrix: ${{ steps.set-days-matrix.outputs.matrix }}
+    steps:
     - id: set-days-matrix
       run: |
-        matrix=`ls input/2021/ | sed 's/day([0-9]+).txt/$1/g' | jq -s '.'`
+        matrix=`ls input/2021/ | sed -r 's/.*([0-9]+).*/\1/g' | jq -sc '.'`
         echo "::set-output name=matrix::${matrix}"
   benchmark:
     needs: build
@@ -48,7 +50,7 @@ jobs:
     strategy:
       matrix:
         part: [1, 2]
-        day: ${{ fromJSON(needs.job1.outputs.matrix) }}
+        day: ${{ fromJSON(needs.pre-benchmarks.outputs.matrix) }}
     steps:
       - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
         id: benchmark
