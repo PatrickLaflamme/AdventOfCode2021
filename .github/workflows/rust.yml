@@ -42,7 +42,7 @@ jobs:
     needs: pre-benchmark
     runs-on: ubuntu-latest
     steps:
-    - run: ${{ fromJSON(needs.pre-benchmarks.outputs.matrix) }}
+    - run: ${{ needs.pre-benchmarks.outputs.matrix }}
   benchmark:
     needs: pre-benchmark
     runs-on: ubuntu-latest
