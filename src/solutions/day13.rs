@@ -57,7 +57,7 @@ pub fn solve_part2(inputs: &(Vec<(isize, isize)>, HashSet<(isize,isize)>)) -> St
         .collect::<Vec<(usize, usize)>>();
     let (mx, my) = letters_pic.iter()
         .fold((0,0), |(mx, my), (x,y)| (max(mx, *x + 1), max(my, *y + 1)));
-    let mut img = vec![vec!["."; mx]; my];
+    let mut img = vec![vec![" "; mx]; my];
     letters_pic.iter()
         .for_each(|(x,y)| img[*y][*x] = "#");
     let img_str = img.iter()
