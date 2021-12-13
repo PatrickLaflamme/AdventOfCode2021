@@ -25,8 +25,10 @@ jobs:
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Build
       run: |
+        cargo install cargo-aoc || true
         cargo build --verbose
-        tar -czvf build-artifact.tar.gz target
+        cargo aoc bench -d1 -p1
+        tar -czvf build-artifact.tar.gz .cargo target
     - name: Run tests
       run: cargo test --verbose
     - uses: actions/upload-artifact@v2
@@ -55,16 +57,6 @@ jobs:
           matrix=`ls input/2021/ | sed -r 's/day([0-9]+).*/\1/g' | jq -sc 'unique'`
           echo "${matrix}"
           echo "::set-output name=matrix::${matrix}"
-      - name: Build
-        run: |
-          cargo install cargo-aoc || true
-          cargo aoc bench -d1 -p1
-          tar -czvf cargo-aoc-artifact.tar.gz .cargo target
-      - uses: actions/upload-artifact@v2
-        with:
-          name: cargo-aoc-artifact
-          path: cargo-aoc-artifact.tar.gz
-          retention-days: 1
   benchmark:
     needs: pre-benchmark
     runs-on: ubuntu-latest
@@ -86,13 +78,9 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifact
-      - uses: actions/download-artifact@v2
-        with:
-          name: cargo-aoc-artifact
       - name: unpack artifacts
         run: |
           tar -xzvf build-artifact.tar.gz
-          tar -xzvf cargo-aoc-artifact.tar.gz
       - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
         id: benchmark
         run: |
