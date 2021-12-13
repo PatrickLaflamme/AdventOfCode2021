@@ -26,7 +26,7 @@ jobs:
     - name: Build
       run: |
         cargo build --verbose
-        tar -czvf artifact.tar.gz target
+        tar -czvf build-artifact.tar.gz target
     - name: Run tests
       run: cargo test --verbose
     - uses: actions/upload-artifact@v2
@@ -59,7 +59,7 @@ jobs:
         run: |
           cargo install cargo-aoc || true
           cargo aoc benchmark
-          tar -czvf artifact.tar.gz .cargo target
+          tar -czvf cargo-aoc-artifact.tar.gz .cargo target
       - uses: actions/upload-artifact@v2
         with:
           name: cargo-aoc-artifact
