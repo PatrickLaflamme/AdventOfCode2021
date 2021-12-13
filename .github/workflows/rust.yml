@@ -52,9 +52,9 @@ jobs:
       - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
         id: benchmark
         run: |
-        cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
-        runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/(default)/base/estimates.json | jq -r '.Mean.point_estimate'`
-        echo "::set-output name=time::${runtime}"
+          cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
+          runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/(default)/base/estimates.json | jq -r '.Mean.point_estimate'`
+          echo "::set-output name=time::${runtime}"
       - name: Create Awesome Badge
         uses: schneegans/dynamic-badges-action@v1.1.0
         with:
