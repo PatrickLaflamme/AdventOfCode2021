@@ -13,7 +13,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    outputs: ${{ steps.set-days-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
@@ -28,8 +28,39 @@ jobs:
     - name: Install AoC client
       run: cargo install cargo-aoc || true
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --verbose --release
     - name: Run tests
       run: cargo test --verbose
-    - name: Run Latest AOC challenge
-      run: cargo aoc
+    - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: advent-of-code-2021
+          path: |
+            target/
+    - id: set-days-matrix
+      run: |
+        matrix=`ls input/2021/ | sed 's/day([0-9]+).txt/$1/g' | jq -s '.'`
+        echo "::set-output name=matrix::${matrix}"
+  benchmark:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        part: [1, 2]
+        day: ${{ fromJSON(needs.job1.outputs.matrix) }}
+    steps:
+      - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
+        id: benchmark
+        run: |
+        cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
+        runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/(default)/base/estimates.json | jq -r '.Mean.point_estimate'`
+        echo "::set-output name=time::${runtime}"
+      - name: Create Awesome Badge
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: a054aa6c1453da6f3126d12b4d59ff59
+          filename: benchmark-aoc-2021-day-${{ matrix.day }}-part-${{ matrix.part }}.json
+          label: runtime
+          message: ${{ steps.benchmark.outputs.time }}
+          color: informational
