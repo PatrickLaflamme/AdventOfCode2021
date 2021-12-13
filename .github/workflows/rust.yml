@@ -32,11 +32,11 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
     - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: advent-of-code-2021
-          path: |
-            target/
+      uses: actions/upload-artifact@v2
+      with:
+        name: advent-of-code-2021
+        path: |
+          target/
     - id: set-days-matrix
       run: |
         matrix=`ls input/2021/ | sed 's/day([0-9]+).txt/$1/g' | jq -s '.'`
