@@ -28,7 +28,7 @@ jobs:
         cargo install cargo-aoc || true
         cargo build --verbose
         cargo aoc bench -d1 -p1
-        tar -czvf build-artifact.tar.gz .cargo target
+        tar -czvf build-artifact.tar.gz target
     - name: Run tests
       run: cargo test --verbose
     - uses: actions/upload-artifact@v2
