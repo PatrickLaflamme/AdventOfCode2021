@@ -8,7 +8,7 @@ function displaytime {
   (( $MS > 1000 )) && printf '%.3fs\n' $S
   (( $MS <= 1000 && $US > 1000 )) && printf '%.3fms\n' $MS
   (( $US <= 1000 && $NS > 1000 )) && printf '%.3fµs\n' $US
-  (( $NS < 1000 ))     && printf '%.3fns\n' $NS
+  (( $NS < 1000 ))     && printf '%dns\n' $NS
 }
 
 displaytime $1
