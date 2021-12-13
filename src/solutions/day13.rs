@@ -171,6 +171,6 @@ mod tests {
         #   #
         #####
         ".lines().map(|s| s.trim()).filter(|s| !s.is_empty()).collect::<Vec<&str>>().join("\n");
-        assert_eq!(solve_part2(&example), ["".to_string(), expected].join(""));
+        assert_eq!(solve_part2(&example), ["\n".to_string(), expected].join(""));
     }
 }
