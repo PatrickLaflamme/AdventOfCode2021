@@ -85,12 +85,12 @@ jobs:
         run: |
           cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
           echo "Getting Runtime"
-          runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/\(default\)/base/estimates.json | jq -r '.Mean.point_estimate' | sed -r 's/([0-9]*\.[0-9]{0,3}).*/\1/g'`
+          runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/\(default\)/base/estimates.json | jq -r '.Mean.point_estimate | floor'`
           echo "Got runtime $runtime Humanizing"
           humanized_runtime=`. .utils/humanizeDuration.sh ${runtime}`
           echo "humanized $humanized_runtime"
           echo "::set-output name=time::${humanized_runtime}"
-      - name: Create Awesome Badge
+      - name: Create Runtime Badge
         uses: schneegans/dynamic-badges-action@v1.1.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
