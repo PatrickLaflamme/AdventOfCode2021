@@ -45,7 +45,7 @@ jobs:
         matrix=`ls input/2021/ | sed -r 's/.*([0-9]+).*/\1/g' | jq -sc '.'`
         echo "::set-output name=matrix::${matrix}"
   benchmark:
-    needs: build
+    needs: pre-benchmark
     runs-on: ubuntu-latest
     strategy:
       matrix:
