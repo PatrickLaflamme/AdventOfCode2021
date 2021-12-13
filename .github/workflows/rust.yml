@@ -32,10 +32,11 @@ jobs:
     outputs: 
       matrix: ${{ steps.set-days-matrix.outputs.matrix }}
     steps:
-    - id: set-days-matrix
-      run: |
-        matrix=`ls input/2021/ | sed -r 's/.*([0-9]+).*/\1/g' | jq -sc '.'`
-        echo "::set-output name=matrix::${matrix}"
+      - uses: actions/checkout@v2
+      - id: set-days-matrix
+        run: |
+          matrix=`ls input/2021/ | sed -r 's/.*([0-9]+).*/\1/g' | jq -sc '.'`
+          echo "::set-output name=matrix::${matrix}"
   benchmark:
     needs: pre-benchmark
     runs-on: ubuntu-latest
@@ -44,6 +45,16 @@ jobs:
         part: [1, 2]
         day: ${{ fromJSON(needs.pre-benchmarks.outputs.matrix) }}
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install AoC client
         run: cargo install cargo-aoc || true
       - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
