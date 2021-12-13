@@ -60,8 +60,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        part: [1, 2]
         day: ${{ fromJSON(needs.pre-benchmark.outputs.matrix) }}
+        part: [1, 2]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -86,8 +86,8 @@ jobs:
           cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
           echo "Getting Runtime"
           runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/\(default\)/base/estimates.json | jq -r '.Mean.point_estimate | floor'`
-          echo "Got runtime $runtime. Humanizing"
-          humanized_runtime=`.utils/humanizeDuration.sh ${runtime}`
+          echo "Got runtime $runtime Humanizing"
+          humanized_runtime=`. .utils/humanizeDuration.sh ${runtime}.0`
           echo "humanized $humanized_runtime"
           echo "::set-output name=time::${humanized_runtime}"
       - name: Create Awesome Badge
