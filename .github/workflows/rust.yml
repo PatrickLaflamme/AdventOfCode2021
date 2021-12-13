@@ -57,7 +57,7 @@ jobs:
           echo "::set-output name=matrix::${matrix}"
       - name: Build
         run: |
-          cargo install aoc || true
+          cargo install cargo-aoc || true
           cargo aoc benchmark
           tar -czvf artifact.tar.gz .cargo target
       - uses: actions/upload-artifact@v2
