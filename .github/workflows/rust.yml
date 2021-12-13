@@ -24,10 +24,18 @@ jobs:
           target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Build
-      run: cargo build --verbose
+      run: |
+        cargo build --verbose
+        tar -czvf artifact.tar.gz target
     - name: Run tests
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: artifact.tar.gz
+        retention-days: 1
   pre-benchmark:
+    needs: build
     runs-on: ubuntu-latest
     outputs: 
       matrix: ${{ steps.set-days-matrix.outputs.matrix }}
@@ -44,7 +52,7 @@ jobs:
     strategy:
       matrix:
         part: [1, 2]
-        day: ${{ fromJSON(needs.pre-benchmark.outputs.matrix) }}
+        day: [1] # ${{ fromJSON(needs.pre-benchmark.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -56,13 +64,18 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+      - name: unpack build artifact
+        run: tar -xzvf artifact.tar.gz
       - name: Install AoC client
         run: cargo install cargo-aoc || true
       - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
         id: benchmark
         run: |
           cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
-          runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/(default)/base/estimates.json | jq -r '.Mean.point_estimate'`
+          runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/\(default\)/base/estimates.json | jq -r '.Mean.point_estimate'`
           echo "::set-output name=time::${runtime}"
       - name: Create Awesome Badge
         uses: schneegans/dynamic-badges-action@v1.1.0
