@@ -86,7 +86,7 @@ jobs:
           cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
           echo "Getting Runtime"
           runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/\(default\)/base/estimates.json | jq -r '.Mean.point_estimate | floor'`
-          echo "Got runtime $runtime Humanizing"
+          echo "Got runtime $runtime; Humanizing"
           humanized_runtime=`python .utils/humanizeDuration.sh ${runtime}`
           echo "humanized $humanized_runtime"
           echo "::set-output name=time::${humanized_runtime}"

@@ -164,6 +164,13 @@ mod tests {
     #[test]
     fn test_solve_part2() {
         let example: (Vec<(isize, isize)>, HashSet<(isize,isize)>) = generator(&EXAMPLE);
-        assert_eq!(solve_part2(&example), "O");
+        let expected = "
+        #####
+        #   #
+        #   #
+        #   #
+        #####
+        ".lines().map(|s| s.trim()).filter(|s| !s.is_empty()).collect::<Vec<&str>>().join("\n");
+        assert_eq!(solve_part2(&example), ["".to_string(), expected].join(""));
     }
 }
