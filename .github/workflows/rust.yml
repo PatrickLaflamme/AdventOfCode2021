@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - id: set-days-matrix
         run: |
-          matrix=`ls input/2021/ | sed -r 's/.*([0-9]+).*/\1/g' | jq -sc '.'`
+          matrix=`ls input/2021/ | sed -r 's/day([0-9]+).*/\1/g' | jq -sc '.'`
           echo "${matrix}"
           echo "::set-output name=matrix::${matrix}"
   debug:
