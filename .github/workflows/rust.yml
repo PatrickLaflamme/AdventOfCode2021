@@ -41,9 +41,18 @@ jobs:
       matrix: ${{ steps.set-days-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v2
+      - uses: technote-space/get-diff-action@v5
+        with:
+          PATTERNS: |
+            input/2021/*.txt
+            src/solutions/*.rs
+            !src/solutions/mod.rs
+          FILES: |
+            Cargo.lock
       - id: set-days-matrix
         run: |
-          matrix=`ls input/2021/ | sed -r 's/day([0-9]+).*/\1/g' | jq -sc '.'`
+          echo $GIT_DIFF
+          matrix=`ls input/2021/ | sed -r 's/day([0-9]+).*/\1/g' | jq -sc 'unique'`
           echo "${matrix}"
           echo "::set-output name=matrix::${matrix}"
   benchmark:
@@ -75,8 +84,11 @@ jobs:
         id: benchmark
         run: |
           cargo aoc bench -d ${{ matrix.day }} -p ${{ matrix.part }}
+          echo "Getting Runtime"
           runtime=`cat target/aoc/aoc-autobench/target/criterion/Day${{ matrix.day }}\ -\ Part${{ matrix.part }}/\(default\)/base/estimates.json | jq -r '.Mean.point_estimate | floor'`
+          echo "Got runtime $runtime. Humanizing"
           humanized_runtime=`.utils/humanizeDuration.sh ${runtime}`
+          echo "humanized $humanized_runtime"
           echo "::set-output name=time::${humanized_runtime}"
       - name: Create Awesome Badge
         uses: schneegans/dynamic-badges-action@v1.1.0
