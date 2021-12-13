@@ -58,7 +58,7 @@ jobs:
       - name: Build
         run: |
           cargo install cargo-aoc || true
-          cargo aoc benchmark
+          cargo aoc bench -d1 -p1
           tar -czvf cargo-aoc-artifact.tar.gz .cargo target
       - uses: actions/upload-artifact@v2
         with:
