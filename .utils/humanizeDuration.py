@@ -6,10 +6,10 @@ MS = US / 1000
 S = MS / 1000
 
 if MS > 1000:
-  print("{:.3f}s".format(S))
+  print("{:.3g}s".format(S))
 elif US > 1000:
-  print("{:.3f}ms".format(MS))
+  print("{:.3g}ms".format(MS))
 elif NS > 1000:
-  print("{:.3f}µs".format(US))
+  print("{:.3g}µs".format(US))
 else:
-  print("{:.3f}ns".format(NS))
+  print("{:.3g}ns".format(NS))
