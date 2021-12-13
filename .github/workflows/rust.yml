@@ -92,6 +92,18 @@ jobs:
           echo "humanized $humanized_runtime"
           echo "::set-output name=time::${humanized_runtime}"
       - name: Create Runtime Badge
+        id: badge_attempt_1
+        continue-on-error: true
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: a054aa6c1453da6f3126d12b4d59ff59
+          filename: benchmark-aoc-2021-day-${{ matrix.day }}-part-${{ matrix.part }}.json
+          label: runtime
+          message: ${{ steps.benchmark.outputs.time }}
+          color: informational
+      - name: Create Runtime Badge retry
+        if: steps.badge_attempt_1.outcome=='failure'
         uses: schneegans/dynamic-badges-action@v1.1.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
