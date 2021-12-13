@@ -1,44 +1,57 @@
 use aoc_runner_derive::{aoc, aoc_generator};
-use std::collections::HashMap;
-use std::collections::HashSet;
-use std::collections::VecDeque;
 
 const END: &str = "end";
 const START: &str = "start";
 
 #[aoc_generator(day12)]
-pub fn generator(raw_input: &str) -> HashMap<String, HashSet<String>> {
-    let mut data = HashMap::<String, HashSet<String>>::new();
+pub fn generator(raw_input: &str) -> (u8, u8, Vec<(bool, Vec<u8>)>) {
+    let mut ids = raw_input.lines()
+        .filter(|s| !s.trim().is_empty())
+        .flat_map(|s| s.trim().splitn(2, "-"))
+        .collect::<Vec<_>>();
+    ids.sort_unstable();
+    ids.dedup();
+    let start = ids.binary_search(&START).unwrap() as u8;
+    let end = ids.binary_search(&END).unwrap() as u8;
+    let mut data = ids.iter()
+        .map(|s| (&s.to_uppercase() == s, Vec::with_capacity(ids.len())))
+        .collect::<Vec<(bool, Vec<u8>)>>();
     raw_input.lines()
         .filter(|s| !s.trim().is_empty())
         .for_each(|s| {
             let nodes: Vec<&str> = s.trim().split("-").collect();
-            let first = nodes[0].to_string();
-            let second = nodes[1].to_string();
-            if second != END && first != START {
-                data.entry(second.to_string()).or_insert(HashSet::new()).insert(first.to_string());
+            let first = ids.binary_search(&nodes[0]).unwrap() as u8;
+            let second = ids.binary_search(&nodes[1]).unwrap() as u8;
+            if second != end && first != start {
+                data[second as usize].1.push(first);
             }
-            if second != START && first != END {
-                data.entry(first.to_string()).or_insert(HashSet::new()).insert(second.to_string());
+            if second != start && first != end {
+                data[first as usize].1.push(second);
             }
         });
-    data
+    (start, end, data)
 }
 
 #[aoc(day12, part1)]
-pub fn solve_part1(nodes: &HashMap<String, HashSet<String>>) -> usize {
+pub fn solve_part1(input_data: &(u8, u8, Vec<(bool, Vec<u8>)>)) -> usize {
+    let (start, end, nodes) = input_data;
     let mut paths = 0;
-    let mut que: VecDeque<(String, HashSet<String>)> = VecDeque::from([(START.to_string(), HashSet::new())]);
+    let mut que: Vec<(u8, Vec<bool>)> = Vec::from([(*start, vec![false; nodes.len()])]);
+    que.reserve(1028);
     while que.len() > 0 {
-        let (node, mut seen) = que.pop_front().unwrap();
-        seen.insert(node.to_string());
-        let next_nodes = nodes.get(&node).unwrap();
-        if next_nodes.contains(END) {
+        let (node, mut seen) = que.pop().unwrap();
+        let (_, next_nodes) = &nodes[node as usize];
+        seen[node as usize] = true;
+        if next_nodes.contains(end) {
             paths += 1;
         }
         for next in next_nodes {
-            if (!seen.contains(next) || &next.to_uppercase() == next) && next != END {
-                que.push_back((next.to_string(), seen.clone()))
+            if next == end {
+                continue;
+            }
+            let (is_large_cave, _) = &nodes[*next as usize];
+            if !seen[*next as usize] || *is_large_cave {
+                que.push((*next, seen.clone()))
             }
         }
     }
@@ -46,21 +59,27 @@ pub fn solve_part1(nodes: &HashMap<String, HashSet<String>>) -> usize {
 }
 
 #[aoc(day12, part2)]
-pub fn solve_part2(nodes: &HashMap<String, HashSet<String>>) -> usize {
+pub fn solve_part2(input_data: &(u8, u8, Vec<(bool, Vec<u8>)>)) -> usize {
+    let (start, end, nodes) = input_data;
     let mut paths = 0;
-    let mut que: VecDeque<(String, HashSet<String>, bool)> = VecDeque::from([(START.to_string(), HashSet::new(), false)]);
+    let mut que: Vec<(u8, Vec<bool>, bool)> = Vec::from([(*start, vec![false; nodes.len()], false)]);
+    que.reserve(32768);
     while que.len() > 0 {
-        let (node, mut seen, doubled) = que.pop_front().unwrap();
-        seen.insert(node.to_string());
-        let next_nodes = nodes.get(&node).unwrap();
-        if next_nodes.contains(END) {
+        let (node, mut seen, doubled) = que.pop().unwrap();
+        let (_, next_nodes) = &nodes[node as usize];
+        seen[node as usize] = true;
+        if next_nodes.contains(end) {
             paths += 1;
         }
         for next in next_nodes {
-            if (!seen.contains(next) || &next.to_uppercase() == next) && next != END {
-                que.push_back((next.to_string(), seen.clone(), doubled))
-            } else if (!doubled || &next.to_uppercase() == next) && next != END {
-                que.push_back((next.to_string(), seen.clone(), true))
+            if next == end {
+                continue;
+            }
+            let (is_large_cave, _) = &nodes[*next as usize];
+            if !seen[*next as usize] || *is_large_cave {
+                que.push((*next, seen.clone(), doubled))
+            } else if !doubled || *is_large_cave {
+                que.push((*next, seen.clone(), true))
             }
         }
     }
@@ -117,39 +136,38 @@ mod tests {
 
     #[test]
     fn test_generator() {
-        let expected = [
-            ("start", vec!["A", "b"]),
-            ("A", vec!["c", "b", "end"]),
-            ("b", vec!["A", "d", "end"]),
-            ("c", vec!["A"]),
-            ("d", vec!["b"])
-        ].iter()
-            .map(|(k, v)| (k.to_string(), v.iter().map(|s| s.to_string()).collect::<HashSet<String>>()))
-            .collect::<HashMap<String, HashSet<String>>>();
-        assert_eq!(generator(&EXAMPLE1), expected);
+        let expected = vec![
+            (true, vec![2, 1, 4]),
+            (false, vec![0, 3, 4]),
+            (false, vec![0]),
+            (false, vec![1]),
+            (false, vec![]),
+            (false, vec![0,1])
+        ];
+        assert_eq!(generator(&EXAMPLE1), (5, 4, expected));
     }
 
     #[test]
     fn test_solve_part1_example1() {
-        let example: HashMap<String, HashSet<String>> = generator(&EXAMPLE1);
+        let example: (u8, u8, Vec<(bool, Vec<u8>)>) = generator(&EXAMPLE1);
         assert_eq!(solve_part1(&example), 10);
     }
 
     #[test]
     fn test_solve_part1_example2() {
-        let example: HashMap<String, HashSet<String>> = generator(&EXAMPLE2);
+        let example: (u8, u8, Vec<(bool, Vec<u8>)>) = generator(&EXAMPLE2);
         assert_eq!(solve_part1(&example), 19);
     }
 
     #[test]
     fn test_solve_part1_example3() {
-        let example: HashMap<String, HashSet<String>> = generator(&EXAMPLE3);
+        let example: (u8, u8, Vec<(bool, Vec<u8>)>) = generator(&EXAMPLE3);
         assert_eq!(solve_part1(&example), 226);
     }
 
     #[test]
     fn test_solve_part2() {
-        let example: HashMap<String, HashSet<String>> = generator(&EXAMPLE1);
+        let example: (u8, u8, Vec<(bool, Vec<u8>)>) = generator(&EXAMPLE1);
         assert_eq!(solve_part2(&example), 36);
     }
 }
