@@ -23,18 +23,10 @@ jobs:
           ~/.cargo/git/db/
           target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    - name: Install AoC client
-      run: cargo install cargo-aoc || true
     - name: Build
-      run: cargo build --verbose --release
+      run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: advent-of-code-2021
-        path: |
-          target/
   pre-benchmark:
     runs-on: ubuntu-latest
     outputs: 
@@ -52,6 +44,8 @@ jobs:
         part: [1, 2]
         day: ${{ fromJSON(needs.pre-benchmarks.outputs.matrix) }}
     steps:
+      - name: Install AoC client
+        run: cargo install cargo-aoc || true
       - name: Benchmark Day ${{ matrix.day }} Part ${{ matrix.part }}
         id: benchmark
         run: |
