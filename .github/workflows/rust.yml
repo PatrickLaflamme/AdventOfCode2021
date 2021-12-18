@@ -60,6 +60,7 @@ jobs:
   benchmark:
     needs: pre-benchmark
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         day: ${{ fromJSON(needs.pre-benchmark.outputs.matrix) }}
